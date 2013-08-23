@@ -1,6 +1,6 @@
 {
     "name": "nordsoftware/yii-parsley",
-	"description": "Parsley.js integration for the Yii PHP framework.",
+    "description": "Parsley.js integration for the Yii PHP framework.",
     "keywords": ["yii", "parsley", "client", "validation"],
     "license": "BSD-3-Clause",
     "authors": [
@@ -14,5 +14,6 @@
         }
     ],
     "require": {
+        "crisu83/yiistrap": "dev-master"
     }
 }
