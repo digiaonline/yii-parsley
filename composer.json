@@ -13,7 +13,17 @@
             "email": "christoffer.lindqvist@nordsoftware.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.phundament.com"
+        }
+    ],
+    "minimum-stability": "dev",
     "require": {
         "crisu83/yiistrap": "dev-master"
+    },
+    "require-dev": {
+        "yiisoft/yii": ">=1.1.14"
     }
 }
