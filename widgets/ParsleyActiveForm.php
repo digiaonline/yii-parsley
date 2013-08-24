@@ -4,7 +4,7 @@
  * @author Christoffer Niska <christoffer.niska@gmail.com>
  * @copyright Copyright &copy; Nord Software 2013-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @package parsley.widgets
+ * @package nordsoftware.yii-parsley.widgets
  */
 
 Yii::import('vendor.crisu83.yii-extension.behaviors.WidgetBehavior');
