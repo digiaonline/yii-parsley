@@ -4,7 +4,7 @@
  * @author Christoffer Niska <christoffer.niska@gmail.com>
  * @copyright Copyright &copy; Nord Software 2013-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @package parsley.validators
+ * @package nordsoftware.yii-parsley.validators
  */
 
 /**
