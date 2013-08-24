@@ -30,8 +30,5 @@ class ParsleyPhoneNumberValidator extends CValidator implements ParsleyValidator
     public function registerValidation(&$htmlOptions)
     {
         $htmlOptions['data-type'] = 'phone';
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

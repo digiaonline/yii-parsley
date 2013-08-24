@@ -48,8 +48,5 @@ class ParsleyCheckboxValidator extends CValidator implements ParsleyValidator
                 $htmlOptions['data-maxcheck'] = $this->max;
             }
         }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

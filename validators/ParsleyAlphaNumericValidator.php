@@ -30,8 +30,5 @@ class ParsleyAlphaNumericValidator extends CValidator implements ParsleyValidato
     public function registerValidation(&$htmlOptions)
     {
         $htmlOptions['data-type'] = 'alphanum';
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

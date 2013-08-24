@@ -92,12 +92,11 @@ class ParsleyActiveForm extends CWidget
     {
         echo CHtml::endForm();
         $id = $this->getId();
-
         $onFieldError = <<<EOD
 function(elem, parsleyField) {
     var controlGroup = elem.closest('.control-group');
     if (controlGroup.length) {
-        controlGroup.addClass('error');
+        controlGroup.removeClass('success').addClass('error');
     }
 }
 EOD;
@@ -105,11 +104,10 @@ EOD;
 function(elem, parsleyField) {
     var controlGroup = elem.closest('.control-group');
     if (controlGroup.length) {
-        controlGroup.removeClass('error');
+        controlGroup.removeClass('error').addClass('success');
     }
 }
 EOD;
-
         $this->events['onFieldError'] = $onFieldError;
         $this->events['onFieldSuccess'] = $onFieldSuccess;
         $this->registerEvents();

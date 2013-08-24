@@ -31,8 +31,5 @@ class ParsleyStringValidator extends CStringValidator implements ParsleyValidato
                 $htmlOptions['data-maxlength'] = $this->max;
             }
         }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

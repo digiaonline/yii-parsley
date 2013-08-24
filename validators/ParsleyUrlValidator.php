@@ -32,8 +32,5 @@ class ParsleyUrlValidator extends CUrlValidator implements ParsleyValidator
                 $htmlOptions['data-type'] = 'url';
             }
         }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }
