@@ -27,8 +27,5 @@ class ParsleyDateIsoValidator extends CDateValidator implements ParsleyValidator
             $htmlOptions['data-notblank'] = 'true';
         }
         $htmlOptions['data-type'] = 'dateIso';
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

@@ -28,8 +28,5 @@ class ParsleyRequiredValidator extends CRequiredValidator implements ParsleyVali
         } else {
             $htmlOptions['data-required'] = 'true';
         }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

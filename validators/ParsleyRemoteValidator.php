@@ -37,8 +37,5 @@ class ParsleyRemoteValidator extends CValidator implements ParsleyValidator
         if (isset($this->url)) {
             $htmlOptions['data-remote'] = CHtml::normalizeUrl($this->url);
         }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

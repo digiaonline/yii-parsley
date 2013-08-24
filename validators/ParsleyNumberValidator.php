@@ -13,6 +13,11 @@
 class ParsleyNumberValidator extends CNumberValidator implements ParsleyValidator
 {
     /**
+     * @var bool whether to use HTML5 attributes instead of data-attributes.
+     */
+    public $html5Mode;
+
+    /**
      * Registers the parsley html attributes.
      * @param array $htmlOptions the HTML attributes.
      */
@@ -49,9 +54,6 @@ class ParsleyNumberValidator extends CNumberValidator implements ParsleyValidato
                     $htmlOptions['data-max'] = $this->max;
                 }
             }
-        }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
         }
     }
 }

@@ -37,8 +37,5 @@ class ParsleyCompareValidator extends CValidator implements ParsleyValidator
         if (isset($this->compareSelector)) {
             $htmlOptions['data-equalto'] = $this->compareSelector;
         }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

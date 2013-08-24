@@ -31,8 +31,5 @@ class ParsleyEmailValidator extends CEmailValidator implements ParsleyValidator
         } else {
             $htmlOptions['data-type'] = 'email';
         }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }

@@ -32,8 +32,5 @@ class ParsleyRegularExpressionValidator extends CRegularExpressionValidator impl
             // todo: support flags, e.g. incase sensitive
             $htmlOptions['data-regexp'] = $this->pattern;
         }
-        if (isset($this->message)) {
-            $htmlOptions['data-error-message'] = $this->message;
-        }
     }
 }
