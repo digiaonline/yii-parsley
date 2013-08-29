@@ -2,6 +2,7 @@
 /**
  * ParsleyRegularExpressionValidator class file.
  * @author Christoffer Niska <christoffer.niska@gmail.com>
+ * @author Christoffer Lindqvist <christoffer.lindqvist@nordsoftware.com>
  * @copyright Copyright &copy; Nord Software 2013-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @package nordsoftware.yii-parsley.validators
@@ -19,18 +20,43 @@ class ParsleyRegularExpressionValidator extends CRegularExpressionValidator impl
 
     /**
      * Registers the parsley html attributes.
+     * @param CModel $object the data object being validated.
+     * @param string $attribute the name of the attribute to be validated.
      * @param array $htmlOptions the HTML attributes.
      */
-    public function registerValidation(&$htmlOptions)
+    public function registerClientValidation($object, $attribute, &$htmlOptions)
     {
         if (!$this->allowEmpty) {
             $htmlOptions['data-notblank'] = true;
         }
         if ($this->html5Mode) {
             $htmlOptions['pattern'] = $this->pattern;
+            $htmlOptions['data-pattern-message'] = $this->getErrorMessage($object, $attribute);
         } else {
             // todo: support flags, e.g. incase sensitive
             $htmlOptions['data-regexp'] = $this->pattern;
+            $htmlOptions['data-type-regexp-message'] = $this->getErrorMessage($object, $attribute);
         }
+    }
+
+    /**
+     * Returns the validation error message.
+     * @param CModel $object the data object being validated.
+     * @param string $attribute the name of the attribute to be validated.
+     * @return string the message.
+     */
+    public function getErrorMessage($object, $attribute)
+    {
+        if (isset($this->message)) {
+            $message = $this->message;
+        } else {
+            $message = Yii::t('validator', 'The value is invalid.');
+        }
+        return strtr(
+            $message,
+            array(
+                '{attribute}' => $object->getAttributeLabel($attribute),
+            )
+        );
     }
 }

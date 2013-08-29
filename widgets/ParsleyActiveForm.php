@@ -2,6 +2,7 @@
 /**
  * ParsleyActiveForm class file.
  * @author Christoffer Niska <christoffer.niska@gmail.com>
+ * @author Christoffer Lindqvist <christoffer.lindqvist@nordsoftware.com>
  * @copyright Copyright &copy; Nord Software 2013-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @package nordsoftware.yii-parsley.widgets
@@ -111,6 +112,7 @@ EOD;
         $this->events['onFieldError'] = $onFieldError;
         $this->events['onFieldSuccess'] = $onFieldSuccess;
         $this->registerEvents();
+        $this->registerMessages();
         $options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
         $assetsUrl = $this->publishAssets(__DIR__ . '/../assets', true);
         /* @var CClientScript $cs */
@@ -134,6 +136,43 @@ EOD;
             }
         }
         $this->options['listeners'] = $listeners;
+    }
+
+    /**
+     * Registers default validator messages.
+     */
+    protected function registerMessages()
+    {
+        $this->options['messages'] = array(
+            'defaultMessage' => Yii::t('validation', 'This value seems to be invalid.'),
+            'type' => array(
+                'email' => Yii::t('validation', 'This value should be a valid email.'),
+                'url' => Yii::t('validation', 'This value should be a valid url.'),
+                'urlstrict' => Yii::t('validation', 'This value should be a valid url.'),
+                'number' => Yii::t('validation', 'This value should be a valid number.'),
+                'digits' => Yii::t('validation', 'This value should be digits.'),
+                'dateIso' => Yii::t('validation', 'This value should be a valid date (YYYY-MM-DD).'),
+                'alphanum' => Yii::t('validation', 'This value should be alphanumeric.'),
+                'phone' => Yii::t('validation', 'This value should be a valid phone number.'),
+            ),
+            'notnull' => Yii::t('validation', 'This value should not be null.'),
+            'notblank' => Yii::t('validation', 'This value should not be blank.'),
+            'required' => Yii::t('validation', 'This value is required.'),
+            'regexp' => Yii::t('validation', 'This value seems to be invalid.'),
+            'min' => Yii::t('validation', 'This value should be greater than or equal to %s.'),
+            'max' => Yii::t('validation', 'This value should be lower than or equal to %s.'),
+            'range' => Yii::t('validation', 'This value should be between %s and %s.'),
+            'minlength' => Yii::t('validation', 'This value is too short. It should have %s characters or more.'),
+            'maxlength' => Yii::t('validation', 'This value is too long. It should have %s characters or less.'),
+            'rangelength' => Yii::t(
+                'validation',
+                'This value length is invalid. It should be between %s and %s characters long.'
+            ),
+            'mincheck' => Yii::t('validation', 'You must select at least %s choices.'),
+            'maxcheck' => Yii::t('validation', 'You must select %s choices or less.'),
+            'rangecheck' => Yii::t('validation', 'You must select between %s and %s choices.'),
+            'equalto' => Yii::t('validation', 'This value should be the same.'),
+        );
     }
 
     /**
@@ -550,6 +589,7 @@ EOD;
      * Generates a control group with a drop down list for a model attribute.
      * @param CModel $model the data model.
      * @param string $attribute the attribute name.
+     * @param array $data data for generating the list options (value=>display).
      * @param array $htmlOptions additional HTML attributes.
      * @return string the generated row.
      * @see TbHtml::activeDropDownListControlGroup
@@ -564,6 +604,7 @@ EOD;
      * Generates a control group with a list box for a model attribute.
      * @param CModel $model the data model.
      * @param string $attribute the attribute name.
+     * @param array $data data for generating the list options (value=>display).
      * @param array $htmlOptions additional HTML attributes.
      * @return string the generated row.
      * @see TbHtml::activeListBoxControlGroup
@@ -649,7 +690,7 @@ EOD;
     }
 
     /**
-     * Generates a control group with an uneditable field for a model attribute.
+     * Generates a control group with an un-editable field for a model attribute.
      * @param CModel $model the data model.
      * @param string $attribute the attribute name.
      * @param array $htmlOptions additional HTML attributes.
@@ -689,7 +730,7 @@ EOD;
                 if (property_exists($validator, 'html5Mode')) {
                     $validator->html5Mode = $this->html5Mode;
                 }
-                $validator->registerValidation($htmlOptions);
+                $validator->registerClientValidation($model, $attribute, $htmlOptions);
             }
         }
     }
