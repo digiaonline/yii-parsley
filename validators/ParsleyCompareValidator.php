@@ -2,6 +2,7 @@
 /**
  * ParsleyCompareValidator class file.
  * @author Christoffer Niska <christoffer.niska@gmail.com>
+ * @author Christoffer Lindqvist <christoffer.lindqvist@nordsoftware.com>
  * @copyright Copyright &copy; Nord Software 2013-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @package nordsoftware.yii-parsley.validators
@@ -10,7 +11,7 @@
 /**
  * Validator for comparing input values.
  */
-class ParsleyCompareValidator extends CValidator implements ParsleyValidator
+class ParsleyCompareValidator extends CCompareValidator implements ParsleyValidator
 {
     /**
      * @var string the CSS selector for the element to compare values with.
@@ -18,24 +19,35 @@ class ParsleyCompareValidator extends CValidator implements ParsleyValidator
     public $compareSelector;
 
     /**
-     * Validates a single attribute.
-     * This method should be overridden by child classes.
-     * @param CModel $object the data object being validated
+     * Registers the parsley html attributes.
+     * @param CModel $object the data object being validated.
      * @param string $attribute the name of the attribute to be validated.
+     * @param array $htmlOptions the HTML attributes.
      */
-    protected function validateAttribute($object, $attribute)
+    public function registerClientValidation($object, $attribute, &$htmlOptions)
     {
-        // client side validation only.
+        $htmlOptions['data-equalto'] = $this->compareSelector;
+        $htmlOptions['data-equalto-message'] = $this->getErrorMessage($object, $attribute);
     }
 
     /**
-     * Registers the parsley html attributes.
-     * @param array $htmlOptions the HTML attributes.
+     * Returns the validation error message.
+     * @param CModel $object the data object being validated.
+     * @param string $attribute the name of the attribute to be validated.
+     * @return string the message.
      */
-    public function registerValidation(&$htmlOptions)
+    public function getErrorMessage($object, $attribute)
     {
-        if (isset($this->compareSelector)) {
-            $htmlOptions['data-equalto'] = $this->compareSelector;
+        if (isset($this->message)) {
+            $message = $this->message;
+        } else {
+            $message = Yii::t('validator', 'This value must be repeated exactly.');
         }
+        return strtr(
+            $message,
+            array(
+                '{attribute}' => $object->getAttributeLabel($attribute),
+            )
+        );
     }
 }
