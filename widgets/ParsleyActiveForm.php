@@ -93,28 +93,10 @@ class ParsleyActiveForm extends CWidget
     {
         echo CHtml::endForm();
         $id = $this->getId();
-        $onFieldError = <<<EOD
-function(elem, parsleyField) {
-    var controlGroup = elem.closest('.control-group');
-    if (controlGroup.length) {
-        controlGroup.removeClass('success').addClass('error');
-    }
-}
-EOD;
-        $onFieldSuccess = <<<EOD
-function(elem, parsleyField) {
-    var controlGroup = elem.closest('.control-group');
-    if (controlGroup.length) {
-        controlGroup.removeClass('error').addClass('success');
-    }
-}
-EOD;
-        $this->events['onFieldError'] = $onFieldError;
-        $this->events['onFieldSuccess'] = $onFieldSuccess;
         $this->registerEvents();
         $this->registerMessages();
         $options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
-        $assetsUrl = $this->publishAssets(__DIR__ . '/../assets', true);
+        $assetsUrl = $this->publishAssets(__DIR__ . '/../assets');
         /* @var CClientScript $cs */
         $cs = $this->getClientScript();
         $cs->registerCoreScript('jquery');
@@ -127,6 +109,10 @@ EOD;
      */
     protected function registerEvents()
     {
+        if (empty($this->events)) {
+            return;
+        }
+
         $listeners = array();
         foreach ($this->events as $name => $handler) {
             if ($handler instanceof CJavaScriptExpression) {
