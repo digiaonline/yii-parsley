@@ -80,8 +80,12 @@ class ParsleyActiveForm extends CWidget
     {
         $this->attachBehavior('extension', new WidgetBehavior());
         $this->copyId();
-        TbArray::defaultValue('successClass', 'success', $this->options);
-        TbArray::defaultValue('errorClass', 'error', $this->options);
+        TbArray::defaultValues(array(
+                'successClass' => 'success',
+                'errorClass' => 'error',
+                'focus' => 'first',
+                'trigger' => 'keyup',
+            ), $this->options);
         $method = $this->stateful ? 'statefulFormTb' : 'beginFormTb';
         echo TbHtml::$method($this->layout, $this->action, $this->method, $this->htmlOptions);
     }
