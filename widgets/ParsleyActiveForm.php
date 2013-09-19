@@ -8,7 +8,7 @@
  * @package nordsoftware.yii-parsley.widgets
  */
 
-Yii::import('vendor.crisu83.yii-extension.behaviors.WidgetBehavior');
+Yii::import('bootstrap.widgets.TbActiveForm');
 
 /**
  * Active form with support for client-side validation through parsley.js.
@@ -19,7 +19,7 @@ Yii::import('vendor.crisu83.yii-extension.behaviors.WidgetBehavior');
  * @method registerScriptFile($url, $position = null) via WidgetBehavior
  * @method getClientScript() via WidgetBehavior
  */
-class ParsleyActiveForm extends CWidget
+class ParsleyActiveForm extends TbActiveForm
 {
     const FOCUS_FIRST = 'first';
     const FOCUS_LAST = 'last';
@@ -31,30 +31,9 @@ class ParsleyActiveForm extends CWidget
     const TRIGGER_KEYUP = 'keyup';
 
     /**
-     * @var string mixed the form action URL.
-     */
-    public $action = '';
-
-    /**
-     * @var string the form submission method. This should be either 'post' or 'get'.
-     * Defaults to 'post'.
-     */
-    public $method = 'post';
-
-    /**
      * @var string the form layout.
      */
     public $layout = TbHtml::FORM_LAYOUT_VERTICAL;
-
-    /**
-     * @var bool whether to generate a stateful form. Defaults to false.
-     */
-    public $stateful = false;
-
-    /**
-     * @var array the HTML attributes for the form.
-     */
-    public $htmlOptions = array();
 
     /**
      * @var array the javascript options for parsley.js.
@@ -78,16 +57,17 @@ class ParsleyActiveForm extends CWidget
      */
     public function init()
     {
-        $this->attachBehavior('extension', new WidgetBehavior());
-        $this->copyId();
-        TbArray::defaultValues(array(
+        parent::init();
+
+        TbArray::defaultValues(
+            array(
                 'successClass' => 'success',
                 'errorClass' => 'error',
                 'focus' => 'first',
                 'trigger' => 'keyup',
-            ), $this->options);
-        $method = $this->stateful ? 'statefulFormTb' : 'beginFormTb';
-        echo TbHtml::$method($this->layout, $this->action, $this->method, $this->htmlOptions);
+            ),
+            $this->options
+        );
     }
 
     /**
@@ -176,7 +156,7 @@ class ParsleyActiveForm extends CWidget
     public function textField($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeTextField($model, $attribute, $htmlOptions);
+        return parent::textField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -190,7 +170,7 @@ class ParsleyActiveForm extends CWidget
     public function passwordField($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activePasswordField($model, $attribute, $htmlOptions);
+        return parent::passwordField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -204,7 +184,7 @@ class ParsleyActiveForm extends CWidget
     public function urlField($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeUrlField($model, $attribute, $htmlOptions);
+        return parent::urlField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -218,7 +198,7 @@ class ParsleyActiveForm extends CWidget
     public function emailField($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeEmailField($model, $attribute, $htmlOptions);
+        return parent::emailField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -232,7 +212,7 @@ class ParsleyActiveForm extends CWidget
     public function numberField($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeNumberField($model, $attribute, $htmlOptions);
+        return parent::numberField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -246,7 +226,7 @@ class ParsleyActiveForm extends CWidget
     public function rangeField($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeRangeField($model, $attribute, $htmlOptions);
+        return parent::rangeField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -258,7 +238,8 @@ class ParsleyActiveForm extends CWidget
      */
     public function dateField($model, $attribute, $htmlOptions = array())
     {
-        return TbHtml::activeDateField($model, $attribute, $htmlOptions);
+        $this->registerValidators($model, $attribute, $htmlOptions);
+        return parent::dateField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -272,7 +253,7 @@ class ParsleyActiveForm extends CWidget
     public function textArea($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeTextArea($model, $attribute, $htmlOptions);
+        return parent::textArea($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -286,7 +267,7 @@ class ParsleyActiveForm extends CWidget
     public function fileField($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeFileField($model, $attribute, $htmlOptions);
+        return parent::fileField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -300,7 +281,7 @@ class ParsleyActiveForm extends CWidget
     public function radioButton($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeRadioButton($model, $attribute, $htmlOptions);
+        return parent::radioButton($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -314,7 +295,7 @@ class ParsleyActiveForm extends CWidget
     public function checkBox($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeCheckBox($model, $attribute, $htmlOptions);
+        return parent::checkBox($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -329,7 +310,7 @@ class ParsleyActiveForm extends CWidget
     public function dropDownList($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeDropDownList($model, $attribute, $data, $htmlOptions);
+        return parent::dropDownList($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -344,7 +325,7 @@ class ParsleyActiveForm extends CWidget
     public function listBox($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeListBox($model, $attribute, $data, $htmlOptions);
+        return parent::listBox($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -359,7 +340,7 @@ class ParsleyActiveForm extends CWidget
     public function radioButtonList($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeRadioButtonList($model, $attribute, $data, $htmlOptions);
+        return parent::radioButtonList($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -374,7 +355,7 @@ class ParsleyActiveForm extends CWidget
     public function inlineRadioButtonList($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeInlineRadioButtonList($model, $attribute, $data, $htmlOptions);
+        return parent::inlineRadioButtonList($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -389,7 +370,7 @@ class ParsleyActiveForm extends CWidget
     public function checkBoxList($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeCheckBoxList($model, $attribute, $data, $htmlOptions);
+        return parent::checkBoxList($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -404,7 +385,7 @@ class ParsleyActiveForm extends CWidget
     public function inlineCheckBoxList($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeInlineCheckBoxList($model, $attribute, $data, $htmlOptions);
+        return parent::inlineCheckBoxList($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -418,7 +399,7 @@ class ParsleyActiveForm extends CWidget
     public function uneditableField($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeUneditableField($model, $attribute, $htmlOptions);
+        return parent::uneditableField($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -432,7 +413,7 @@ class ParsleyActiveForm extends CWidget
     public function searchQuery($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeSearchQueryField($model, $attribute, $htmlOptions);
+        return parent::searchQuery($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -446,7 +427,7 @@ class ParsleyActiveForm extends CWidget
     public function textFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeTextFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::textFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -460,7 +441,7 @@ class ParsleyActiveForm extends CWidget
     public function passwordFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activePasswordFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::passwordFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -474,7 +455,7 @@ class ParsleyActiveForm extends CWidget
     public function urlFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeUrlFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::urlFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -488,7 +469,7 @@ class ParsleyActiveForm extends CWidget
     public function emailFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeTextFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::emailFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -502,7 +483,7 @@ class ParsleyActiveForm extends CWidget
     public function numberFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeNumberFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::numberFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -516,7 +497,7 @@ class ParsleyActiveForm extends CWidget
     public function rangeFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeRangeFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::rangeFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -530,7 +511,7 @@ class ParsleyActiveForm extends CWidget
     public function dateFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeDateFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::dateFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -544,7 +525,7 @@ class ParsleyActiveForm extends CWidget
     public function textAreaControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeTextAreaControlGroup($model, $attribute, $htmlOptions);
+        return parent::textAreaControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -558,7 +539,7 @@ class ParsleyActiveForm extends CWidget
     public function checkBoxControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeCheckBoxControlGroup($model, $attribute, $htmlOptions);
+        return parent::checkBoxControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -572,7 +553,7 @@ class ParsleyActiveForm extends CWidget
     public function radioButtonControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeRadioButtonControlGroup($model, $attribute, $htmlOptions);
+        return parent::radioButtonControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -587,7 +568,7 @@ class ParsleyActiveForm extends CWidget
     public function dropDownListControlGroup($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeDropDownListControlGroup($model, $attribute, $data, $htmlOptions);
+        return parent::dropDownListControlGroup($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -602,7 +583,7 @@ class ParsleyActiveForm extends CWidget
     public function listBoxControlGroup($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeListBoxControlGroup($model, $attribute, $data, $htmlOptions);
+        return parent::listBoxControlGroup($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -616,7 +597,7 @@ class ParsleyActiveForm extends CWidget
     public function fileFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeFileFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::fileFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -631,7 +612,7 @@ class ParsleyActiveForm extends CWidget
     public function radioButtonListControlGroup($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeRadioButtonListControlGroup($model, $attribute, $data, $htmlOptions);
+        return parent::radioButtonListControlGroup($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -646,7 +627,7 @@ class ParsleyActiveForm extends CWidget
     public function inlineRadioButtonListControlGroup($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeInlineRadioButtonListControlGroup($model, $attribute, $data, $htmlOptions);
+        return parent::inlineRadioButtonListControlGroup($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -661,7 +642,7 @@ class ParsleyActiveForm extends CWidget
     public function checkBoxListControlGroup($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeCheckBoxListControlGroup($model, $attribute, $data, $htmlOptions);
+        return parent::checkBoxListControlGroup($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -676,7 +657,7 @@ class ParsleyActiveForm extends CWidget
     public function inlineCheckBoxListControlGroup($model, $attribute, $data, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeInlineCheckBoxListControlGroup($model, $attribute, $data, $htmlOptions);
+        return parent::inlineCheckBoxListControlGroup($model, $attribute, $data, $htmlOptions);
     }
 
     /**
@@ -690,7 +671,7 @@ class ParsleyActiveForm extends CWidget
     public function uneditableFieldControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeUneditableFieldControlGroup($model, $attribute, $htmlOptions);
+        return parent::uneditableFieldControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
@@ -704,7 +685,7 @@ class ParsleyActiveForm extends CWidget
     public function searchQueryControlGroup($model, $attribute, $htmlOptions = array())
     {
         $this->registerValidators($model, $attribute, $htmlOptions);
-        return TbHtml::activeSearchQueryControlGroup($model, $attribute, $htmlOptions);
+        return parent::searchQueryControlGroup($model, $attribute, $htmlOptions);
     }
 
     /**
