@@ -15,13 +15,26 @@
     ],
     "repositories": [
         {
-            "type": "composer",
-            "url": "http://packages.phundament.com"
+            "type": "package",
+            "package": {
+                "name": "guillaumepotier/parsleyjs",
+                "version": "1.1.18",
+                "dist": {
+                    "url": "https://github.com/guillaumepotier/Parsley.js/archive/1.1.18.zip",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "https://github.com/guillaumepotier/Parsley.js",
+                    "type": "git",
+                    "reference": "tags/1.1.18"
+                }
+            }
         }
     ],
     "minimum-stability": "dev",
     "require": {
-        "crisu83/yiistrap": "dev-master"
+        "crisu83/yiistrap": ">=1.2.0",
+        "crisu83/yii-extension": "1.1.*"
     },
     "require-dev": {
         "yiisoft/yii": ">=1.1.14"

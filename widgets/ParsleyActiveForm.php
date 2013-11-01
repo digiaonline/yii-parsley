@@ -8,18 +8,20 @@
  * @package nordsoftware.yii-parsley.widgets
  */
 
-Yii::import('vendor.crisu83.yii-extension.behaviors.WidgetBehavior');
+Yii::import('bootstrap.widgets.TbActiveForm');
 
 /**
  * Active form with support for client-side validation through parsley.js.
  *
- * @method copyId() via WidgetBehavior
- * @method publishAssets($path, $forceCopy = false) via WidgetBehavior
- * @method registerCssFile($url, $media = '') via WidgetBehavior
- * @method registerScriptFile($url, $position = null) via WidgetBehavior
- * @method getClientScript() via WidgetBehavior
+ * Methods accessible through the 'TbWidget' class:
+ * @method string resolveId($id = null)
+ * @method string publishAssets($path, $forceCopy = false)
+ * @method void registerCssFile($url, $media = '')
+ * @method void registerScriptFile($url, $position = null)
+ * @method string resolveScriptVersion($filename, $minified = false)
+ * @method CClientScript getClientScript()
  */
-class ParsleyActiveForm extends CWidget
+class ParsleyActiveForm extends TbActiveForm
 {
     const FOCUS_FIRST = 'first';
     const FOCUS_LAST = 'last';
@@ -59,9 +61,7 @@ class ParsleyActiveForm extends CWidget
     /**
      * @var array the javascript options for parsley.js.
      */
-    public $options = array();
-
-    // todo: add support for setting the minimum length to trigger validation.
+    public $pluginOptions = array();
 
     /**
      * @var bool whether to use HTML5 attributes instead of data-attributes.
@@ -74,16 +74,31 @@ class ParsleyActiveForm extends CWidget
     public $events = array();
 
     /**
+     * @var bool whether to bind the plugin to the associated dom element.
+     */
+    public $bindPlugin = true;
+
+    /**
+     * @var string path to widget assets.
+     */
+    public $assetPath;
+
+    // todo: add support for setting the minimum length to trigger validation.
+
+    /**
      * Initializes the widget.
      */
     public function init()
     {
-        $this->attachBehavior('extension', new WidgetBehavior());
-        $this->copyId();
-        TbArray::defaultValue('successClass', 'success', $this->options);
-        TbArray::defaultValue('errorClass', 'error', $this->options);
-        $method = $this->stateful ? 'statefulFormTb' : 'beginFormTb';
-        echo TbHtml::$method($this->layout, $this->action, $this->method, $this->htmlOptions);
+        TbArray::defaultValue('successClass', 'success', $this->pluginOptions);
+        TbArray::defaultValue('errorClass', 'error', $this->pluginOptions);
+        if (!isset($this->assetPath)) {
+            $this->assetPath = Yii::getPathOfAlias('vendor.guillaumepotier.parsleyjs.dist');
+        }
+        if (!$this->bindPlugin) {
+            $this->htmlOptions['data-plugin-options'] = CJSON::encode($this->pluginOptions);
+        }
+        parent::init();
     }
 
     /**
@@ -91,17 +106,27 @@ class ParsleyActiveForm extends CWidget
      */
     public function run()
     {
-        echo CHtml::endForm();
-        $id = $this->getId();
+        echo TbHtml::endForm();
         $this->registerEvents();
         $this->registerMessages();
-        $options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
-        $assetsUrl = $this->publishAssets(__DIR__ . '/../assets');
-        /* @var CClientScript $cs */
-        $cs = $this->getClientScript();
-        $cs->registerCoreScript('jquery');
-        $cs->registerScriptFile($assetsUrl . '/js/parsley.js', CClientScript::POS_END);
-        $cs->registerScript(__CLASS__ . '#' . $id, "jQuery('#{$id}').parsley({$options});", CClientScript::POS_END);
+
+        if ($this->assetPath !== false) {
+            $assetsUrl = $this->publishAssets($this->assetPath);
+            /* @var CClientScript $cs */
+            $cs = $this->getClientScript();
+            $cs->registerCoreScript('jquery');
+            $cs->registerScriptFile($assetsUrl . '/parsley.min.js', CClientScript::POS_END);
+        }
+
+        if ($this->bindPlugin) {
+            $id = $this->getId();
+            $options = !empty($this->pluginOptions) ? CJavaScript::encode($this->pluginOptions) : '';
+            $this->getClientScript()->registerScript(
+                __CLASS__ . '#' . $id,
+                "jQuery('#{$id}').parsley({$options});",
+                CClientScript::POS_END
+            );
+        }
     }
 
     /**
@@ -121,7 +146,7 @@ class ParsleyActiveForm extends CWidget
                 $listeners[$name] = new CJavaScriptExpression($handler);
             }
         }
-        $this->options['listeners'] = $listeners;
+        $this->pluginOptions['listeners'] = $listeners;
     }
 
     /**
@@ -129,7 +154,7 @@ class ParsleyActiveForm extends CWidget
      */
     protected function registerMessages()
     {
-        $this->options['messages'] = array(
+        $this->pluginOptions['messages'] = array(
             'defaultMessage' => Yii::t('validation', 'This value seems to be invalid.'),
             'type' => array(
                 'email' => Yii::t('validation', 'This value should be a valid email.'),
