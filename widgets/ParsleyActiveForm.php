@@ -53,14 +53,19 @@ class ParsleyActiveForm extends TbActiveForm
     public $events = array();
 
     /**
-     * @var bool whether to bind the plugin to the associated dom element.
-     */
-    public $bindPlugin = true;
-
-    /**
      * @var string path to widget assets.
      */
     public $assetPath;
+
+    /**
+     * @var bool whether to register the associated script files.
+     */
+    public $registerJs = true;
+
+    /**
+     * @var bool whether to bind the plugin to the associated dom element.
+     */
+    public $bindPlugin = true;
 
     // todo: add support for setting the minimum length to trigger validation.
 
@@ -75,6 +80,7 @@ class ParsleyActiveForm extends TbActiveForm
             $this->assetPath = Yii::getPathOfAlias('vendor.guillaumepotier.parsleyjs.dist');
         }
         if (!$this->bindPlugin) {
+            $this->htmlOptions['data-plugin'] = 'parsley';
             $this->htmlOptions['data-plugin-options'] = CJSON::encode($this->pluginOptions);
         }
         parent::init();
@@ -91,10 +97,10 @@ class ParsleyActiveForm extends TbActiveForm
 
         if ($this->assetPath !== false) {
             $assetsUrl = $this->publishAssets($this->assetPath);
-            /* @var CClientScript $cs */
-            $cs = $this->getClientScript();
-            $cs->registerCoreScript('jquery');
-            $cs->registerScriptFile($assetsUrl . '/parsley.min.js', CClientScript::POS_END);
+            if ($this->registerJs) {
+                $this->getClientScript()->registerCoreScript('jquery');
+                $this->registerScriptFile($assetsUrl . '/parsley.min.js', CClientScript::POS_END);
+            }
         }
 
         if ($this->bindPlugin) {
@@ -102,8 +108,7 @@ class ParsleyActiveForm extends TbActiveForm
             $options = !empty($this->pluginOptions) ? CJavaScript::encode($this->pluginOptions) : '';
             $this->getClientScript()->registerScript(
                 __CLASS__ . '#' . $id,
-                "jQuery('#{$id}').parsley({$options});",
-                CClientScript::POS_END
+                "jQuery('#{$id}').parsley({$options});"
             );
         }
     }
