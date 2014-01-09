@@ -19,6 +19,18 @@ class ParsleyRegularExpressionValidator extends CRegularExpressionValidator impl
     public $html5Mode;
 
     /**
+     * Validates the specified object.
+     * @param CModel $object the data object being validated
+     * @param array $attributes the list of attributes to be validated. Defaults to null,
+     * meaning every attribute listed in {@link attributes} will be validated.
+     */
+    public function validate($object,$attributes=null)
+    {
+        $this->normalizePattern();
+        parent::validate($object, $attributes);
+    }
+
+    /**
      * Registers the parsley html attributes.
      * @param CModel $object the data object being validated.
      * @param string $attribute the name of the attribute to be validated.
@@ -35,7 +47,7 @@ class ParsleyRegularExpressionValidator extends CRegularExpressionValidator impl
         } else {
             // todo: support flags, e.g. incase sensitive
             $htmlOptions['data-regexp'] = $this->pattern;
-            $htmlOptions['data-type-regexp-message'] = $this->getErrorMessage($object, $attribute);
+            $htmlOptions['data-regexp-message'] = $this->getErrorMessage($object, $attribute);
         }
     }
 
@@ -58,5 +70,13 @@ class ParsleyRegularExpressionValidator extends CRegularExpressionValidator impl
                 '{attribute}' => $object->getAttributeLabel($attribute),
             )
         );
+    }
+
+    /**
+     * Normalizes regexp pattern, i.e. adds the beginning and ending delimiter.
+     */
+    protected function normalizePattern()
+    {
+        $this->pattern = '/' . $this->pattern . '/';
     }
 }
