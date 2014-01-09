@@ -29,7 +29,6 @@ class ParsleyNumberValidator extends CNumberValidator implements ParsleyValidato
         if (!$this->allowEmpty) {
             $htmlOptions['data-notblank'] = 'true';
         }
-
         if ($this->integerOnly) {
             $htmlOptions['data-type'] = 'digits';
             $htmlOptions['data-type-digits-message'] = Yii::t(
@@ -39,9 +38,7 @@ class ParsleyNumberValidator extends CNumberValidator implements ParsleyValidato
                     '{attribute}' => $object->getAttributeLabel($attribute),
                 )
             );
-        }
-
-        if (isset($this->min, $this->max)) {
+        } elseif (isset($this->min, $this->max)) {
             if ($this->html5Mode) {
                 $htmlOptions['type'] = 'range';
                 $htmlOptions['min'] = $this->min;
@@ -66,6 +63,13 @@ class ParsleyNumberValidator extends CNumberValidator implements ParsleyValidato
                 $htmlOptions['data-max'] = $this->max;
             }
             $htmlOptions['data-max-message'] = $this->getErrorMessage($object, $attribute);
+        } else {
+            if ($this->html5Mode) {
+                $htmlOptions['type'] = 'number';
+            } else {
+                $htmlOptions['data-type'] = 'number';
+            }
+            $htmlOptions['data-type-number-message'] = $this->getErrorMessage($object, $attribute);
         }
     }
 
