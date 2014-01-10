@@ -45,7 +45,7 @@ class ParsleyRequiredValidator extends CRequiredValidator implements ParsleyVali
         if (isset($this->message)) {
             $message = $this->message;
         } else {
-            $message = Yii::t('validator', 'The value cannot be blank.');
+            $message = Yii::t('validator', 'This value is required.');
         }
         return strtr(
             $message,
