@@ -96,10 +96,10 @@ class ParsleyActiveForm extends TbActiveForm
         $this->registerMessages();
 
         if ($this->assetPath !== false) {
-            $assetsUrl = $this->publishAssets($this->assetPath);
+            $this->publishAssets($this->assetPath);
             if ($this->registerJs) {
                 $this->getClientScript()->registerCoreScript('jquery');
-                $this->registerScriptFile($assetsUrl . '/parsley.min.js', CClientScript::POS_END);
+                $this->registerScriptFile('parsley.min.js', CClientScript::POS_END);
             }
         }
 
