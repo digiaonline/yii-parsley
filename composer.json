@@ -34,7 +34,7 @@
     "minimum-stability": "dev",
     "require": {
         "crisu83/yiistrap": ">=1.2.0",
-        "crisu83/yii-extension": "1.1.*",
+        "crisu83/yii-extension": ">=1.1.0",
         "guillaumepotier/parsleyjs": "1.1.18"
     },
     "require-dev": {
